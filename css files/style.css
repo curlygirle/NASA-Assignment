@@ -1,0 +1,500 @@
+/*font style*/
+@font-face {
+    font-family: "Lara";
+    src: url("/font/lara_regular-webfont.woff");
+}
+
+* {
+font-family: "Lara";
+}
+
+*{
+    margin : 0; 
+    padding: 0;
+    text-decoration: none;
+}
+
+/* this keeps the navbar on top of other content - especially when scrolling down on pages
+header {
+    background-color: transparent;
+    padding: 10px 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000; 
+} */
+
+/* Basic Styling */
+.navbarhome {
+    display: flex;
+    justify-content: center;  /* Center items on the container */
+    align-items: center;   
+    padding: 1rem;
+  }
+  
+  .navbarhome ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 15px;
+  }
+  
+  .navbarhome li {
+    list-style-type: none;
+  }
+  
+  .navbarhome a {
+    text-decoration: none;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .navbarhome a:hover {
+    background-color: lightgrey;
+  }
+  
+  /* Mobile Responsive Code */
+  @media (max-width: 768px) {
+    .navbarhome {
+        justify-content: space-between;  /* Adjusts positioning to space items out */
+      }
+
+    .navbarhome ul {
+      flex-direction: column;
+      display: none;  /* Initially hide on mobile */
+      gap: 0;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background-color: black;
+    }
+  
+    .navbarhome li {
+      text-align: center;
+    }
+  
+    .navbarhome li:not(:last-child) {
+      border-bottom: 1px solid #555;
+    }
+  
+    .navbarhome .menu-toggle {
+      display: block;
+
+    }
+  }
+  
+  /* Add a menu button for smaller screens */
+  .menu-toggle {
+    display: none;
+    background-color: transparent;
+    border: none;
+    color: black;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+
+.header{
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+}
+
+/* navigation bar*/
+.nav{
+    display: flex;
+    padding: 2% 6%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar{
+    flex: 1;
+    text-align: center;
+}
+
+.navbar ul li{
+    list-style: none;
+    display: inline-block;
+    padding: 20px 12px;
+    position: relative;
+}
+
+.navbar ul li a{
+   color: black;
+   text-decoration: none;
+   font-size: 15px;
+}
+
+.navbar ul li::after{
+    content: '';
+    width: 0%;
+    height: 2px;
+    background: lightgrey;
+    display: block;
+    margin: auto;
+    transition: 0.5s;
+
+}
+
+.navbar ul li:hover::after{
+    width: 100%;
+}
+
+nav .fa{
+    display: none;
+}
+
+@media(max-width: 700px){
+    .textbox h1{
+        font-size: 50px;
+    }
+
+    .navbar ul li{
+        display: block;
+    }
+
+    .navbar{
+        position: fixed;
+        background: black;
+        height: 100vh;
+        width: 200px;
+        top: 0;
+        left: -200px;
+        text-align: left;
+        z-index: 2;
+        transition: 1s;
+    }
+
+    nav .fa {
+        display: block;
+        color: black;
+        margin: 10px;
+        font-size: 30px;
+        cursor: pointer;
+    }
+
+    .navbar ul {
+        padding: 30px;
+    }
+}
+
+/*homepage*/
+body.homepage {
+    overflow: hidden;
+}
+
+canvas {
+    display: block;
+}
+
+/*heading fonts for all pages*/
+h1{
+    font-size: 36px;
+    font-weight: 100;
+}
+
+/*about*/
+.aboutheader{
+    height: 0vh;
+    width: 100%;
+    text-align: center;
+    color: black;
+}
+
+.aboutheader{
+    height: 0vh;
+    width: 100%;
+    text-align: center;
+    color: black;
+}
+
+.about{
+    width: 80%;
+    margin: auto;
+    padding-top: 10px;
+    padding-bottom: 50px;
+}
+
+.aboutcol{
+    flex-basis: 48%;
+    padding: 30px 2px;
+}
+
+.aboutcol img{
+    width: 100%;
+}
+
+.aboutcol h1{
+    padding-top: 0;
+}
+
+.aboutcol p{
+    padding: 15px 0 15px;
+}
+
+
+/*blog*/
+.blogheader{
+    height: 8vh;
+    width: 100%;
+    text-align: center;
+    color: black;
+}
+
+/*card section*/
+.card-con{
+    width: 80%;
+    margin:4rem auto;
+    background: white;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+}
+
+.blog-card-con{
+    width: 80%;
+    margin:4rem auto;
+    background: white;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+
+.card{
+    padding: 2rem;
+    box-shadow:0 0 .4rem .4rem  lightgrey;
+    transition: .4s ease-in; 
+}
+
+.card:hover{
+    background:  lightgrey;
+}
+
+.card-head{
+    margin-bottom: .5rem;
+}
+
+@media screen and (max-width:1000px){
+    .card-con{
+        align-items: center;
+    grid-template-columns: repeat(3, 1fr);
+    }
+
+    .blog-card-con{
+        align-items: center;
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width:620px){
+    .card-con{
+        align-items: center;
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .blog-card-con{
+        align-items: center;
+        grid-template-columns: repeat(1, 1fr);
+    } 
+}
+
+h3{
+    text-align: center;
+    font-weight: 100;
+    margin: 10px 0;
+}
+
+p{
+    color: black;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 22px;
+    padding: 10px;
+}
+
+.row{
+    margin: 5%;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+/*data art header*/
+.data-artheader{
+    height: 0vh;
+    width: 100%;
+    text-align: center;
+    color: black;
+}
+
+/*data visuals header*/
+.data-visheader{
+    height: 0vh;
+    width: 100%;
+    text-align: center;
+    color: black;
+}
+
+/*design header*/
+.designheader{
+    height: 10vh;
+    width: 100%;
+    text-align: center;
+    color: black;
+}
+
+.img-gal2{
+    width: 70%;
+    margin: 100px auto 200px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 80px;
+}
+
+.img-gal2 img{
+    width: 100%;
+    height: 100;
+    cursor: pointer;
+}
+
+.img-gal2 img:hover{
+    transform: scale(1.1);
+}
+
+.subheading{
+    color: black;
+    margin: 50px 0;
+    font-weight: 200;
+    padding-left: 150px;
+}
+
+.designcontent{
+    width: 80%;
+    margin: auto;
+}
+
+.designcontent{
+    flex-basis: 100%;
+}
+
+.designcontent h1 {
+    color: black;
+    margin-top: 20px;
+    font-weight: 100;
+}
+
+.designcontent p{
+    color: black;
+    padding: 0;
+    font-size: 16px;
+}
+
+/* scroll to top */
+html{
+    scroll-behavior: smooth;
+}
+
+.to-top{
+    background: transparent ;
+    position: fixed;
+    bottom: 16px;
+    right: 32px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: black;
+    text-decoration: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s;
+    z-index: 1;
+}
+
+.to-top.active{
+    bottom: 32px;
+    pointer-events: auto;
+    opacity: 1;
+}
+
+/* sidebar */
+.sidebar{
+    position: fixed;
+    left: -240px;
+    width: 240px;
+    height: 100%;
+    background: white;
+    transition: all 1s ;
+    z-index: 1;
+}
+
+.sidebar header{
+    color: black;
+    font-size: 28px;
+    line-height: 70px;
+    text-align: center;
+    background: white;
+    user-select: none;
+}
+
+.sidebar a{
+    display: block;
+    color: black ;
+    height: 60px;
+    width: 100%;
+    line-height: 65px;
+    padding-left: 35px;
+    border-left: 5px solid lightgrey;
+    box-sizing: border-box;
+    transition: all .5s ;
+}
+
+#check{
+    display: none;
+}
+
+label #btn, label #cancel{
+    position: absolute;
+    cursor: pointer;
+    background: white;
+    height: 45px;
+    width: 45px;
+    text-align: center;
+    line-height: 45px;
+    font-size: 30px;
+    border-radius: 5px;
+    margin: 15px 30px;
+    margin-top: -2px;
+    border: 1px solid white ;
+    transition: all .5s ;
+}
+
+label #cancel{
+    opacity: 0;
+    visibility: hidden;
+}
+
+#check:checked ~ label #btn{
+    margin-left: 240px;
+    opacity: 0;
+    visibility: hidden;
+}
+
+#check:checked ~ label #cancel{
+    margin-left: 245px;
+    opacity: 1;
+    visibility: visible;
+}
+
+#check:checked ~ .sidebar{
+    left: 0;
+}
