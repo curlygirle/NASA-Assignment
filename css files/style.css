@@ -258,6 +258,19 @@ h3{
     transform: scale(1.1);
 }
 
+.designcol{
+    flex-basis: 100%;
+    background-color: rgb(251, 234, 239);
+    border-radius: 5px;
+    padding: 20px 12px;
+    box-sizing: border-box;
+}
+
+.design{
+    width: 80%;
+    margin: auto;
+    text-align: center;
+}
 
 /*data visuals*/
 .dataheader{
