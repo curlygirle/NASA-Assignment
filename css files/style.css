@@ -309,5 +309,29 @@ html{
     opacity: 1;
 }
 
+/*paragraphs blogs*/
+.paragraph {
+    display: block;
+  }
+  
+  .paragraph p {
+    margin-bottom: 0.5em;
+  }
+  
+  .paragraph p:last-child {
+    margin-bottom: 0;
+  }
+  
+  .paragraph ul {
+    padding-left: 0 1em; /* This adds padding to the left of the list */
+    margin: 0; /* This removes margin from the list */
+    padding: 15px;
+    list-style: none;
+  }
+  
+  .paragraph li {
+    margin-bottom: 0.5em; /* This adds space between the list items */
+    word-wrap: break-word;
+  }
 
 
