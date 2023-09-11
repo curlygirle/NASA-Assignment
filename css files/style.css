@@ -88,7 +88,7 @@ nav .fa{
     }
     .navlinks{
         position: absolute;
-        background: rgba(255, 255, 255, 0.681);
+        background: rgba(255, 255, 255, 0.7);
         height: 100vh;
         width: 200px;
         top: 0;
@@ -367,4 +367,86 @@ html{
     word-wrap: break-word;
   }
 
+/* sidebar */
+.sidebar {
+    position: fixed;
+    left: -240px;
+    width: 240px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    transition: all 1s;
+    z-index: 1;
+}
+
+.sidebar header {
+    color: black;
+    font-size: 28px;
+    line-height: 70px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.7);
+    user-select: none;
+    padding-top: 30px; /* Add padding-top to move the header down */
+}
+
+.sidebar a {
+    display: block;
+    color: black;
+    height: 60px;
+    width: 100%;
+    line-height: 65px;
+    padding-left: 35px;
+    border-left: 5px solid palevioletred;
+    box-sizing: border-box;
+    transition: all .5s;
+    text-decoration: none; /* Removes underline */
+    position: relative; /* Allows absolute positioning of child elements */
+}
+
+#check {
+    display: none;
+}
+
+label #btn, label #cancel {
+    position: absolute;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.7);
+    height: 45px;
+    width: 45px;
+    text-align: center;
+    line-height: 45px;
+    font-size: 30px;
+    border-radius: 5px;
+    margin: 15px 30px;
+    margin-top: -2px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    transition: all .5s;
+    top: 20px; /* Moves the icon lower */
+}
+
+label #cancel {
+    opacity: 0;
+    visibility: hidden;
+}
+
+#check:checked ~ label #btn {
+    margin-left: 240px;
+    opacity: 0;
+    visibility: hidden;
+}
+
+#check:checked ~ label #cancel {
+    margin-left: 245px;
+    opacity: 1;
+    visibility: visible;
+}
+
+#check:checked ~ .sidebar {
+    left: 0;
+}
+
+.main-content {
+    margin-left: 0;
+    padding: 16px;
+    transition: margin-left 0.5s;
+}
 
