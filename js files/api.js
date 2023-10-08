@@ -4,7 +4,6 @@ const API_KEY = "GoeMBuuZBNwxjErw8AJfbweuUpRIxqesP2PevTZu";
 
 btnLoad.addEventListener("click", loadAsteroidsData);
 
-
 async function loadAsteroidsData() {
     const dateInput = document.getElementById('dateInput').value;
     const url = `https://api.nasa.gov/neo/rest/v1/feed?start_date=${dateInput}&end_date=${dateInput}&api_key=${API_KEY}`;
@@ -25,6 +24,7 @@ function displayData(data) {
     let htmlContent = "";
     let diameterData = [];
     let distanceData = [];
+    let asteroidNames = [];
 
     for (let date in asteroids) {
         htmlContent += `<h3>${date}</h3><ul>`;
@@ -34,6 +34,7 @@ function displayData(data) {
             htmlContent += `<li>Name: ${asteroid.name} <br> Diameter: ${avgDiameter.toFixed(2)} meters <br> Distance from Earth: ${parseFloat(distance).toFixed(2)} Megameters</li>`;
             diameterData.push(avgDiameter);
             distanceData.push(parseFloat(distance));
+            asteroidNames.push(asteroid.name); // Add asteroid names to the array
         });
         htmlContent += '</ul>';
     }
@@ -42,25 +43,23 @@ function displayData(data) {
     d3.select('#diameterChart').selectAll("*").remove();
     d3.select('#distanceChart').selectAll("*").remove();
     
-    createBarChart('#diameterChart', diameterData,'Asteroid Diameter in meters');
-    createScatterChart('#distanceChart', distanceData, 'Distance from Earth in Megameters');
-
+    createBarChart('#diameterChart', diameterData, asteroidNames, 'Asteroid Diameter in meters');
+    createScatterChart('#distanceChart', distanceData, asteroidNames, 'Distance from Earth in Megameters');
 }
 
-function createBarChart(selector, data, label) {
-    const margin = {top: 20, right: 80, bottom: 40, left: 50};
-    const width = 550 - margin.left - margin.right;
-    const height = 500 - margin.top - margin.bottom;
+function createBarChart(selector, data, labels, label) {
+    const margin = {top: 20, right: 80, bottom: 80, left: 50};
+    const width = 600 - margin.left - margin.right;
+    const height = 600 - margin.top - margin.bottom;
 
     const svg = d3.select(selector)
                   .append('svg')
                   .attr('width', width + margin.left + margin.right)
                   .attr('height', height + margin.top + margin.bottom)
                   .append('g')
-                  .attr('transform', `translate(${margin.left},${margin.top})`)
-                  ;
+                  .attr('transform', `translate(${margin.left},${margin.top})`);
 
-    const x = d3.scaleBand().domain(data.map((d, i) => i)).range([0, width]).padding(0.1);
+    const x = d3.scaleBand().domain(labels).range([0, width]).padding(0.1);
     const y = d3.scaleLinear().domain([0, d3.max(data)]).nice().range([height, 0]);
 
     // Create a tooltip
@@ -77,7 +76,7 @@ function createBarChart(selector, data, label) {
        .data(data)
        .enter().append('rect')
        .attr('class', 'bar')
-       .attr('x', (d, i) => x(i))
+       .attr('x', (d, i) => x(labels[i]))
        .attr('y', d => y(d))
        .attr('width', x.bandwidth())
        .attr('height', d => height - y(d))
@@ -99,7 +98,10 @@ function createBarChart(selector, data, label) {
     svg.append('g')
        .attr('class', 'x-axis')
        .attr('transform', `translate(0,${height})`)
-       .call(d3.axisBottom(x).tickSize(0).tickFormat(''))
+       .call(d3.axisBottom(x))
+       .selectAll('text')
+       .style('text-anchor', 'end')
+       .attr('transform', 'rotate(-45)');
        
     svg.append('g')
        .attr('class', 'y-axis')
@@ -111,23 +113,21 @@ function createBarChart(selector, data, label) {
        .attr('dy', 0)
        .attr('text-anchor', 'end')
        .text(label);
-       svg.selectAll('.text')
 }
 
-function createScatterChart(selector, data, label) {
-    const margin = {top: 20, right: 80, bottom: 40, left: 50};
-    const width = 550 - margin.left - margin.right;
-    const height = 500 - margin.top - margin.bottom;
+function createScatterChart(selector, data, labels, label) {
+    const margin = {top: 20, right: 80, bottom: 80, left: 50};
+    const width = 600 - margin.left - margin.right;
+    const height = 600 - margin.top - margin.bottom;
 
     const svg = d3.select(selector)
                   .append('svg')
                   .attr('width', width + margin.left + margin.right)
                   .attr('height', height + margin.top + margin.bottom)
                   .append('g')
-                  .attr('transform', `translate(${margin.left},${margin.top})`)
-                  ;
+                  .attr('transform', `translate(${margin.left},${margin.top})`);
 
-    const x = d3.scaleBand().domain(data.map((d, i) => i)).range([0, width]).padding(0.1);
+    const x = d3.scaleBand().domain(labels).range([0, width]).padding(0.1);
     const y = d3.scaleLinear().domain([0, d3.max(data)]).nice().range([height, 0]);
 
     // Create a tooltip
@@ -143,17 +143,17 @@ function createScatterChart(selector, data, label) {
        .selectAll('.dot')
        .data(data)
        .enter()
-       .append('circle')      
-       .attr('class', 'dot')  
-       .attr('cx', (d, htmlContent) => x(htmlContent) + x.bandwidth() / 2)  
-       .attr('cy', d => y(d)) 
+       .append('circle')
+       .attr('class', 'dot')
+       .attr('cx', (d, i) => x(labels[i]) + x.bandwidth() / 2)
+       .attr('cy', d => y(d))
        .attr('r', 5)
        .style('fill', 'plum')
        .on('mouseover', (event, d) => {
            tooltip.transition()
                   .duration(200)
                   .style('opacity', .9);
-                  tooltip.html("Value: " + d.toFixed(2))
+           tooltip.html("Value: " + d.toFixed(2))
                   .style('left', (event.pageX) + 'px')
                   .style('top', (event.pageY - 28) + 'px');
        })
@@ -166,8 +166,11 @@ function createScatterChart(selector, data, label) {
     svg.append('g')
        .attr('class', 'x-axis')
        .attr('transform', `translate(0,${height})`)
-       .call(d3.axisBottom(x).tickSize(0).tickFormat(''));
-       
+       .call(d3.axisBottom(x))
+       .selectAll('text')
+       .style('text-anchor', 'end')
+       .attr('transform', 'rotate(-45)');
+
     svg.append('g')
        .attr('class', 'y-axis')
        .call(d3.axisLeft(y).ticks(5))
