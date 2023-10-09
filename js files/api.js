@@ -72,6 +72,14 @@ function createBarChart(selector, data, label, labelX) {
                       .style('border-radius', '5px')
                       .style('opacity', '0');
 
+
+    svg.append('text')
+        .attr('x', width / 2)
+        .attr('y', -5) // Adjust the y-coordinate as needed for positioning
+        .attr('text-anchor', 'middle')
+        .style('font-weight', 'light')
+        .text('Asteroid Diameter Chart');
+
     svg.append('g')
        .selectAll('.bar')
        .data(data)
@@ -146,6 +154,13 @@ function createScatterChart(selector, data, label, labelX) {
                       .style('border-radius', '5px')
                       .style('opacity', '0');
 
+    svg.append('text')
+        .attr('x', width / 2)
+        .attr('y', -5) // Adjust the y-coordinate as needed for positioning
+        .attr('text-anchor', 'middle')
+        .style('font-weight', 'light')
+        .text('Distance from Earth Chart');
+    
     svg.append('g')
        .selectAll('.dot')
        .data(data)
