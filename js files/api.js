@@ -43,11 +43,11 @@ function displayData(data) {
     d3.select('#diameterChart').selectAll("*").remove();
     d3.select('#distanceChart').selectAll("*").remove();
     
-    createBarChart('#diameterChart', diameterData, asteroidNames, 'Asteroid Diameter in meters');
+    createBarChart('#diameterChart', diameterData, asteroidNames, 'Asteroid Diameter in meters', 'Asteroid Name');
     createScatterChart('#distanceChart', distanceData, asteroidNames, 'Distance from Earth in Megameters');
 }
 
-function createBarChart(selector, data, labels, label) {
+function createBarChart(selector, data, labels, label, labelX) {
     const margin = {top: 20, right: 80, bottom: 80, left: 50};
     const width = 600 - margin.left - margin.right;
     const height = 600 - margin.top - margin.bottom;
@@ -99,9 +99,13 @@ function createBarChart(selector, data, labels, label) {
        .attr('class', 'x-axis')
        .attr('transform', `translate(0,${height})`)
        .call(d3.axisBottom(x))
-       .selectAll('text')
-       .style('text-anchor', 'end')
-       .attr('transform', 'rotate(-45)');
+       .append('text')
+       .attr('fill', '#000')
+       .attr('transform', 'rotate(0)')
+       .attr('x', 450 )
+       .attr('dy', 40)
+       .attr('text-anchor', 'end')
+       .text(labelX);
        
     svg.append('g')
        .attr('class', 'y-axis')
