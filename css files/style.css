@@ -176,6 +176,7 @@ h3{
     flex-basis: 48%;
     border-radius: 10px;
     margin-bottom: 30px;
+    margin-right: 20px;
     position: relative;
     overflow: hidden;
 }
