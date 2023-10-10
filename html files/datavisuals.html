@@ -46,8 +46,41 @@
       <button id="loadData">load asteroids data</button>
       <div id="output"></div>
       <section class="charts-container">
-        <div id="diameterChart"></div>
-        <div id="distanceChart"></div>
+        <div class="chart">
+          <div id="diameterChart"></div>
+          <div class="chart-info" id="diameterChartInfo">
+            <h3>Asteroid Diameter Vs. Asteroid Name Bar Chart</h3>
+            <p>
+              In this chart the information that will be displayed is the name
+              of the Asteroid along with the diameter of the Asteroid (in
+              meters). It is important to note that the x axis values start from
+              0 until whatever number the end provides – this is dependent on
+              the date the user chooses. The 0 represents the first name of the
+              Asteroid, 1 representing the second and so it goes on. This is
+              displayed on our information page generated that has the date
+              above following with the Name, Diameter and Distance from Earth of
+              each Asteroid from that day.
+            </p>
+          </div>
+        </div>
+
+        <div class="chart">
+          <div id="distanceChart"></div>
+          <div class="chart-info" id="distanceChartInfo">
+            <h3>Distance from Earth Vs. Asteroid Name Scatterplot Chart</h3>
+            <p>
+              In this chart the information that will be displayed is the name
+              of the Asteroid along with the distance of the Asteroid from Earth
+              (in megameters). It is important to note that the x axis values
+              start from 0 until whatever number the end provides – this is
+              dependent on the date the user chooses. The 0 represents the first
+              name of the Asteroid, 1 representing the second and so it goes on.
+              This is displayed on our information page generated that has the
+              date above following with the Name, Diameter and Distance from
+              Earth of each Asteroid from that day.
+            </p>
+          </div>
+        </div>
       </section>
 
       <script src="../js files/api.js"></script>
