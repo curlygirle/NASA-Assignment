@@ -4,7 +4,6 @@ const API_KEY = "GoeMBuuZBNwxjErw8AJfbweuUpRIxqesP2PevTZu";
 
 btnLoad.addEventListener("click", loadAsteroidsData);
 
-
 async function loadAsteroidsData() {
     const dateInput = document.getElementById('dateInput').value;
     const url = `https://api.nasa.gov/neo/rest/v1/feed?start_date=${dateInput}&end_date=${dateInput}&api_key=${API_KEY}`;
@@ -41,10 +40,11 @@ function displayData(data) {
     outputDiv.innerHTML = htmlContent;
     d3.select('#diameterChart').selectAll("*").remove();
     d3.select('#distanceChart').selectAll("*").remove();
+    d3.select('#bubbleChart').selectAll("*").remove(); // Remove existing content
 
-    createBarChart('#diameterChart', diameterData,'Asteroid Diameter in meters', 'Asteroid Name');
+    createBarChart('#diameterChart', diameterData, 'Asteroid Diameter in meters', 'Asteroid Name');
     createScatterChart('#distanceChart', distanceData, 'Distance from Earth in Megameters', 'Asteroid Name');
-
+    createBubbleChart('#bubbleChart', diameterData,  distanceData, 'Distance from Earth in Megameters', 'Asteroid Diameter in meters'); // Create the bubble chart
 }
 
 function createBarChart(selector, data, label, labelX) {
@@ -57,8 +57,7 @@ function createBarChart(selector, data, label, labelX) {
                   .attr('width', width + margin.left + margin.right)
                   .attr('height', height + margin.top + margin.bottom)
                   .append('g')
-                  .attr('transform', `translate(${margin.left},${margin.top})`)
-                  ;
+                  .attr('transform', `translate(${margin.left},${margin.top})`);
 
     const x = d3.scaleBand().domain(data.map((d, i) => i)).range([0, width]).padding(0.1);
     const y = d3.scaleLinear().domain([0, d3.max(data)]).nice().range([height, 0]);
@@ -75,7 +74,7 @@ function createBarChart(selector, data, label, labelX) {
 
     svg.append('text')
         .attr('x', width / 2)
-        .attr('y', -5) // Adjust the y-coordinate as needed for positioning
+        .attr('y', -5) 
         .attr('text-anchor', 'middle')
         .style('font-weight', 'light')
         .text('Asteroid Diameter Chart');
@@ -94,7 +93,7 @@ function createBarChart(selector, data, label, labelX) {
            tooltip.transition()
                   .duration(200)
                   .style('opacity', .9);
-                  tooltip.html("Value: " + d.toFixed(2))
+           tooltip.html("Value: " + d.toFixed(2))
                   .style('left', (event.pageX) + 'px')
                   .style('top', (event.pageY - 28) + 'px');
        })
@@ -126,7 +125,6 @@ function createBarChart(selector, data, label, labelX) {
        .attr('dy', 0)
        .attr('text-anchor', 'end')
        .text(label);
-       svg.selectAll('.text')
 }
 
 function createScatterChart(selector, data, label, labelX) {
@@ -139,8 +137,7 @@ function createScatterChart(selector, data, label, labelX) {
                   .attr('width', width + margin.left + margin.right)
                   .attr('height', height + margin.top + margin.bottom)
                   .append('g')
-                  .attr('transform', `translate(${margin.left},${margin.top})`)
-                  ;
+                  .attr('transform', `translate(${margin.left},${margin.top})`);
 
     const x = d3.scaleBand().domain(data.map((d, i) => i)).range([0, width]).padding(0.1);
     const y = d3.scaleLinear().domain([0, d3.max(data)]).nice().range([height, 0]);
@@ -156,7 +153,7 @@ function createScatterChart(selector, data, label, labelX) {
 
     svg.append('text')
         .attr('x', width / 2)
-        .attr('y', -5) // Adjust the y-coordinate as needed for positioning
+        .attr('y', -5) 
         .attr('text-anchor', 'middle')
         .style('font-weight', 'light')
         .text('Distance from Earth Chart');
@@ -175,7 +172,7 @@ function createScatterChart(selector, data, label, labelX) {
            tooltip.transition()
                   .duration(200)
                   .style('opacity', .9);
-                  tooltip.html("Value: " + d.toFixed(2))
+           tooltip.html("Value: " + d.toFixed(2))
                   .style('left', (event.pageX) + 'px')
                   .style('top', (event.pageY - 28) + 'px');
        })
@@ -207,4 +204,84 @@ function createScatterChart(selector, data, label, labelX) {
        .attr('dy', 0)
        .attr('text-anchor', 'end')
        .text(label);
+}
+
+function createBubbleChart(selector, diameterData, distanceData, asteroidNames) {
+    const margin = { top: 20, right: 80, bottom: 40, left: 50 };
+    const width = 550 - margin.left - margin.right;
+    const height = 500 - margin.top - margin.bottom;
+
+    const svg = d3.select(selector)
+        .append('svg')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+        .append('g')
+        .attr('transform', `translate(${margin.left},${margin.top})`);
+
+    const maxDiameter = d3.max(diameterData);
+    const maxDistance = d3.max(distanceData);
+
+    const x = d3.scaleLinear().domain([0, maxDiameter]).nice().range([0, width]);
+    const y = d3.scaleLinear().domain([0, maxDistance]).nice().range([height, 0]);
+    const radius = d3.scaleSqrt().domain([0, maxDiameter]).range([2, 20]);
+
+    // Create a tooltip div for hover information
+    const tooltip = d3.select('body')
+        .append('div')
+        .style('position', 'absolute')
+        .style('background', '#f9f9f9')
+        .style('padding', '5px')
+        .style('border', '1px solid #ccc')
+        .style('border-radius', '5px')
+        .style('opacity', '0')
+        .style('pointer-events', 'none'); // To prevent blocking interactions with the chart
+
+    svg.append('text')
+        .attr('x', width / 2)
+        .attr('y', -5)
+        .attr('text-anchor', 'middle')
+        .style('font-weight', 'light')
+        .text('Distance from Earth Vs. Asteroid Diameter Chart');
+
+    svg
+        .selectAll('.bubble')
+        .data(diameterData)
+        .enter()
+        .append('circle')
+        .attr('class', 'bubble')
+        .attr('cx', (d) => x(d))
+        .attr('cy', (d, i) => y(distanceData[i]))
+        .attr('r', (d) => radius(d))
+        .style('fill', 'skyblue')
+        .on('mouseover', (event, d, i) => {
+            tooltip.transition().duration(200).style('opacity', 0.9);
+            tooltip.html(`Asteroid: ${asteroidNames[i]}<br>Diameter: ${d.toFixed(2)} meters<br>Distance from Earth: ${distanceData[i].toFixed(2)} Megameters`)
+                .style('left', event.pageX + 'px')
+                .style('top', event.pageY - 28 + 'px');
+        })
+        .on('mouseout', () => {
+            tooltip.transition().duration(500).style('opacity', 0);
+        });
+
+    svg.append('g')
+        .attr('class', 'x-axis')
+        .attr('transform', `translate(0,${height})`)
+        .call(d3.axisBottom(x))
+        .append('text')
+        .attr('fill', '#000')
+        .attr('x', 450)
+        .attr('dy', 40)
+        .attr('text-anchor', 'end')
+        .text('Asteroid Diameter in meters');
+
+    svg.append('g')
+        .attr('class', 'y-axis')
+        .call(d3.axisLeft(y).ticks(5))
+        .append('text')
+        .attr('fill', '#000')
+        .attr('transform', 'rotate(-90)')
+        .attr('y', -40)
+        .attr('dy', 0)
+        .attr('text-anchor', 'end')
+        .text('Distance from Earth in Megameters');
 }
