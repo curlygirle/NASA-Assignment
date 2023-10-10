@@ -154,14 +154,28 @@ p{
     padding-top: 35px;
 }
 
+.aboutrow{
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: space-between;
+}
+
 .aboutcol{
-    flex-basis: 48%;
+    flex-basis: calc(50% - 10px); 
     background-color: rgb(251, 234, 239);
     border-radius: 5px;
     margin-bottom: 5%;
     padding: 20px 12px;
     box-sizing: border-box;
 }
+
+.aboutcol img {
+    max-width: 100%; /* Ensure the image doesn't exceed its container's width */
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Remove any extra space below the image */
+    margin: 0 auto; /* Center the image horizontally */
+    max-height: 250px; /* Set a maximum height for the image */
+  }
 
 h3{
     text-align: center;
@@ -171,11 +185,15 @@ h3{
     color: palevioletred;
 }
 
-@media(max-width: 700px){
-    .row{
-        flex-direction: column;
+@media (max-width: 1440px) {
+    .aboutrow {
+      flex-direction: column;
     }
-}
+    
+    .aboutcol {
+      flex-basis: 100%;
+    }
+  }
 
 /*blog page*/
 .blogheader{
@@ -473,4 +491,3 @@ label #cancel {
     padding: 16px;
     transition: margin-left 0.5s;
 }
-
