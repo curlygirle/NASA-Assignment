@@ -262,6 +262,11 @@ h3{
     .row{
         flex-direction: column;
     }
+
+    .blogpostcol img {
+        max-width: 100%; /* Ensure the image doesn't overflow its container */
+        height: auto;     /* Maintain the image's aspect ratio */
+      }
 }
 
 /*design*/
