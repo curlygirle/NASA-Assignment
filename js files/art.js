@@ -63,7 +63,7 @@ function renderAsteroidOrbits(asteroids) {
         .attr("fill", "none")
         .attr("stroke", (d, i) => colorScale(i)) // Assign different colors based on index
         .attr("stroke-opacity", 0.3)
-        .attr("stroke-width", 2) // Adjust the stroke width here
+        .attr("stroke-width", 4) // Adjust the stroke width here
         .on("mouseover", function (event, d) {
             // Display the tooltip with asteroid information
             tooltip.transition()
