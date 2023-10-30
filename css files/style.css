@@ -33,6 +33,19 @@
     border: none; /* To remove iframe border */
 }
 
+.text-overlay {
+    position: absolute;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Center the text using translation */
+    color: black; /* Text color */
+    font-size: 48px; /* Increased font size */
+    letter-spacing: 24px; /* Adjust the letter spacing as needed */
+    padding: 10px; /* Padding around the text */
+    border-radius: 5px; /* Rounded corners */
+    font-weight: light;
+  }
+
 /*navigation bar*/
 nav{
     display: flex;
