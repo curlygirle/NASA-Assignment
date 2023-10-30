@@ -40,6 +40,7 @@ function loadAsteroidsArt() {
   })
   .catch(error => console.error("Error fetching data:", error.message));
 }
+
 function renderAsteroidOrbits(asteroids) {
     asteroids.sort((a, b) => {
         return a.close_approach_data[0].miss_distance.kilometers - b.close_approach_data[0].miss_distance.kilometers;
