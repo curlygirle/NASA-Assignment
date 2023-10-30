@@ -12,8 +12,7 @@ const tooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
-// Define a color scale for the orbits
-const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
 
 // Add event listener to the "Load Asteroids Art" button
 const loadDataButton = document.getElementById("loadData");
@@ -24,29 +23,28 @@ function loadAsteroidsArt() {
     const apiKey = "GoeMBuuZBNwxjErw8AJfbweuUpRIxqesP2PevTZu";
     const apiUrl = `https://api.nasa.gov/neo/rest/v1/neo/browse?api_key=${apiKey}&date=${dateInput}`;
 
-    // Fetch asteroid data for the selected date
-    fetch(apiUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            const asteroids = data.near_earth_objects;
-            renderAsteroidOrbits(asteroids);
-        })
-        .catch(error => console.error("Error fetching data:", error.message)); // Log the error message
+  // Fetch asteroid data for the selected date
+  fetch(apiUrl)
+  .then(response => {
+      if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+  })
+  .then(data => {
+      const asteroids = data.near_earth_objects;
+      if (orbits === null) {
+          orbits = svg.append("g").attr("class", "orbits");
+      }
+      renderAsteroidOrbits(asteroids);
+  })
+  .catch(error => console.error("Error fetching data:", error.message));
 }
-
 function renderAsteroidOrbits(asteroids) {
-    if (!orbits) {
-        // If the "orbits" group doesn't exist, create it
-        orbits = svg.append("g").attr("class", "orbits");
-    } else {
-        // If it already exists, remove previous orbits
-        orbits.selectAll("circle").remove();
-    }
+    asteroids.sort((a, b) => {
+        return a.close_approach_data[0].miss_distance.kilometers - b.close_approach_data[0].miss_distance.kilometers;
+    });
+
 
     // Define a scale for mapping close approach distances to the size of the orbits
     const scale = d3.scaleLinear()
@@ -61,7 +59,13 @@ function renderAsteroidOrbits(asteroids) {
         .attr("cy", height / 2)
         .attr("r", d => scale(d.close_approach_data[0].miss_distance.kilometers))
         .attr("fill", "none")
-        .attr("stroke", (d, i) => colorScale(i)) // Assign different colors based on index
+        .attr("stroke", (d, i) => {
+            const interpolatedColor = i < asteroids.length / 2 ?
+                d3.interpolateHsl('yellow', 'red')(i / (asteroids.length / 2)) :
+                d3.interpolateHsl('red', 'blue')((i - asteroids.length / 2) / (asteroids.length / 2));
+            return interpolatedColor;
+        })
+         // Assign different colors based on index
         .attr("stroke-opacity", 0.3)
         .attr("stroke-width", 4) // Adjust the stroke width here
         .on("mouseover", function (event, d) {
