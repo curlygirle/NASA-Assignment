@@ -449,6 +449,11 @@ html{
     position: relative; /* Allows absolute positioning of child elements */
 }
 
+.sidebar a:hover {
+    background: rgba(0, 0, 0, 0.1); /* Change the background color on hover */
+    color: grey; /* Change the text color on hover */
+}
+
 #check {
     display: none;
 }
