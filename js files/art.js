@@ -1,6 +1,7 @@
 const width = 800;
 const height = 800;
 let orbits = null; // Declare orbits with let
+let networkMap = null;
 
 const svg = d3.select("#orbit-map")
     .attr("width", width)
@@ -12,7 +13,10 @@ const tooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
-
+const networkMapSvg = d3.select("#network-map")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("viewBox", `0 0 ${width} ${height}`);
 
 // Add event listener to the "Load Asteroids Art" button
 const loadDataButton = document.getElementById("loadData");
@@ -37,6 +41,7 @@ function loadAsteroidsArt() {
           orbits = svg.append("g").attr("class", "orbits");
       }
       renderAsteroidOrbits(asteroids);
+      renderNetworkMap(asteroids);
   })
   .catch(error => console.error("Error fetching data:", error.message));
 }
@@ -90,5 +95,70 @@ function renderAsteroidOrbits(asteroids) {
         });
 }
 
-// Add your CSS styling for the tooltip in your HTML and CSS files.
+function renderNetworkMap(asteroids) {
+    const links = [];
+    for (let i = 0; i < asteroids.length; i++) {
+        for (let j = i + 1; j < asteroids.length; j++) {
+            links.push({ source: i, target: j });
+        }
+    }
+
+    const colorScale = d3.scaleOrdinal()
+        .domain(asteroids.map((d, i) => i))
+        .range(d3.schemeCategory10);
+
+    const nodeAndLinkColor = (d, i) => {
+        const interpolatedColor = i < asteroids.length / 2 ?
+            d3.interpolateHsl('hsl(60, 100%, 80%)', 'hsl(0, 100%, 70%)')(i / (asteroids.length / 2)) :
+            d3.interpolateHsl('hsl(0, 100%, 70%)', 'hsl(240, 100%, 70%)')((i - asteroids.length / 2) / (asteroids.length / 2));
+        return interpolatedColor;
+    };
+
+    const simulation = d3.forceSimulation(asteroids)
+        .force("link", d3.forceLink(links).distance(150))
+        .force("charge", d3.forceManyBody().strength(-50))
+        .force("center", d3.forceCenter(width / 2, height / 2));
+
+    const link = networkMapSvg.selectAll(".link")
+        .data(links)
+        .enter().append("line")
+        .attr("class", "link")
+        .attr("stroke", (d, i) => nodeAndLinkColor(d, i));
+
+    const node = networkMapSvg.selectAll(".node")
+        .data(asteroids)
+        .enter().append("circle")
+        .attr("class", "node")
+        .attr("r", 12)
+        .attr("fill", (d, i) => nodeAndLinkColor(d, i))
+        .on("mouseover", function (event, d) {
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", 0.9);
+            tooltip.html(
+                "Name: " + d.name + "<br>" +
+                "Diameter: " + d.estimated_diameter.kilometers.estimated_diameter_max + " kilometers<br>" +
+                "Distance from Earth: " + d.close_approach_data[0].miss_distance.kilometers + " kilometers"
+            )
+                .style("left", (event.pageX + 5) + "px")
+                .style("top", (event.pageY - 28) + "px");
+        })
+        .on("mouseout", () => {
+            tooltip.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
+
+    simulation.on("tick", () => {
+        link
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
+
+        node
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y);
+    });
+}
 
