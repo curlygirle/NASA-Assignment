@@ -115,7 +115,7 @@ function renderNetworkMap(asteroids) {
     };
 
     const simulation = d3.forceSimulation(asteroids)
-        .force("link", d3.forceLink(links).distance(150))
+        .force("link", d3.forceLink(links).distance(300))
         .force("charge", d3.forceManyBody().strength(-50))
         .force("center", d3.forceCenter(width / 2, height / 2));
 
@@ -123,13 +123,14 @@ function renderNetworkMap(asteroids) {
         .data(links)
         .enter().append("line")
         .attr("class", "link")
+        .attr("stroke-width", 1.7)
         .attr("stroke", (d, i) => nodeAndLinkColor(d, i));
 
     const node = networkMapSvg.selectAll(".node")
         .data(asteroids)
         .enter().append("circle")
         .attr("class", "node")
-        .attr("r", 12)
+        .attr("r", 14)
         .attr("fill", (d, i) => nodeAndLinkColor(d, i))
         .on("mouseover", function (event, d) {
             tooltip.transition()
